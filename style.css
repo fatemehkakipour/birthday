@@ -1,0 +1,469 @@
+/* =========================
+   BASE
+========================= */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: system-ui, Arial;
+    background: black;
+    direction:rtl;
+}
+
+/* =========================
+   GAME CONTAINER
+========================= */
+
+.game-container {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background: radial-gradient(circle at top, #050816, #000);
+}
+
+/* =========================
+   GALAXY CANVAS
+========================= */
+
+canvas#galaxy {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+/* =========================
+   UI LAYER (IMPORTANT FIX)
+========================= */
+
+.ui-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none; /* مهم: canvas رو خراب نکنه */
+}
+
+/* =========================
+   STARS
+========================= */
+
+.star {
+    position: absolute;
+    font-size: 22px;
+    color: white;
+    opacity: 0.75;
+    cursor: pointer;
+    text-shadow: 0 0 8px white, 0 0 20px #7dd3fc;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    pointer-events: auto; /* مهم برای کلیک */
+}
+
+    .star:hover {
+        transform: scale(1.35);
+        opacity: 1;
+    }
+
+    .star.active {
+        opacity: 1;
+        transform: scale(1.8);
+        animation: pulse 1.2s infinite;
+    }
+
+@keyframes pulse {
+    0% {
+        transform: scale(1.5);
+    }
+
+    50% {
+        transform: scale(2.0);
+    }
+
+    100% {
+        transform: scale(1.5);
+    }
+}
+
+/* =========================
+   MOON
+========================= */
+
+.moon {
+    position: absolute;
+    bottom: 8%;
+    right: 6%;
+    font-size: 90px;
+    cursor: pointer;
+    text-shadow: 0 0 15px white, 0 0 50px #7dd3fc;
+    animation: glow 2s infinite alternate;
+    pointer-events: auto;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px white;
+    }
+
+    to {
+        text-shadow: 0 0 50px #7dd3fc;
+    }
+}
+
+/* =========================
+   OVERLAY (QUESTION MODAL)
+========================= */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(12px);
+    z-index: 10000;
+}
+
+/* =========================
+   PANEL (QUESTION BOX)
+========================= */
+
+.panel {
+    width: 92%;
+    max-width: 420px;
+    padding: 22px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+    color: white;
+    box-shadow: 0 0 40px rgba(255,255,255,0.15);
+    animation: popIn 0.35s ease;
+}
+
+    .panel h2 {
+        margin: 0 0 10px 0;
+    }
+
+/* =========================
+   OPTIONS
+========================= */
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.option {
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    background: rgba(255,255,255,0.12);
+    color: white;
+    transition: 0.2s;
+}
+
+    .option:hover {
+        transform: scale(1.03);
+        background: rgba(255,255,255,0.2);
+    }
+
+    /* =========================
+   CORRECT / WRONG
+========================= */
+
+    .option.correct {
+        background: #22c55e !important;
+        animation: pop 0.3s ease;
+    }
+
+    .option.wrong {
+        background: #ef4444 !important;
+        animation: shake 0.3s ease;
+    }
+
+@keyframes pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(5px);
+    }
+
+    50% {
+        transform: translateX(-5px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* =========================
+   FINAL SCREEN (IMPORTANT FIX)
+========================= */
+
+.final {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.92);
+    z-index: 99999;
+    animation: finalFade 0.6s ease;
+}
+
+.final-card {
+    text-align: center;
+    color: white;
+    font-size: 28px;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 50px rgba(255,255,255,0.2);
+    animation: popIn 0.8s ease, glow 2s infinite alternate;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes popIn {
+    from {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes finalFade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px white;
+    }
+
+    to {
+        text-shadow: 0 0 40px #7dd3fc;
+    }
+}
+
+/* =========================
+   RESPONSIVE (MOBILE)
+========================= */
+
+@media (max-width: 600px) {
+
+    .panel {
+        width: 95%;
+        padding: 18px;
+    }
+
+    .final-card {
+        font-size: 20px;
+        padding: 20px;
+    }
+
+    .star {
+        font-size: 18px;
+    }
+
+    .moon {
+        font-size: 70px;
+    }
+}
+.memory-card {
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    color: white;
+    text-align: center;
+    border-radius: 25px;
+    background: rgba(255,255,255,.08);
+    backdrop-filter: blur(20px);
+    animation: popIn .6s ease;
+}
+
+    .memory-card h2 {
+        color: #facc15;
+    }
+
+    .memory-card p {
+        line-height: 2;
+        margin: 25px 0;
+    }
+
+.continue-btn {
+    border: none;
+    padding: 12px 25px;
+    border-radius: 15px;
+    background: #facc15;
+    color: black;
+    cursor: pointer;
+}
+
+.final {
+    position: fixed;
+    inset: 0;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 15px;
+    background: radial-gradient(circle at center,#08111f,#000);
+    z-index: 999999;
+}
+
+.final-card {
+    width: min(900px,100%);
+    margin: auto;
+    color: white;
+    text-align: center;
+    padding: 35px;
+    border-radius: 30px;
+    background: rgba(255,255,255,.06);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,.1);
+    box-shadow: 0 0 30px rgba(125,211,252,.15), 0 0 100px rgba(59,130,246,.08);
+    animation: popIn .8s ease;
+}
+
+.moon-title {
+    font-size: 70px;
+    margin-bottom: 10px;
+}
+
+.love-text {
+    line-height: 2;
+    font-size: 18px;
+    margin: 25px 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(130px,1fr));
+    gap: 12px;
+    margin: 30px 0;
+}
+
+
+.stat {
+    padding: 16px;
+    border-radius: 18px;
+    background: linear-gradient( 180deg, rgba(255,255,255,.08), rgba(255,255,255,.03) );
+    border: 1px solid rgba(255,255,255,.08);
+}
+    .stat span {
+        display: block;
+        font-size: 24px;
+        font-weight: bold;
+        color: #facc15;
+    }
+
+    .stat small {
+        opacity: .8;
+    }
+
+.life-box {
+    margin-top: 20px;
+    line-height: 2.2;
+    font-size: 18px;
+}
+
+.ending {
+    margin-top: 30px;
+    line-height: 2;
+    font-size: 20px;
+}
+
+.heart-big {
+    margin-top: 25px;
+    font-size: 80px;
+    animation: heartbeat 1s infinite;
+}
+
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.25);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.love-text,
+.life-box,
+.ending {
+    white-space: pre-line;
+}
+
+@media(max-width:768px) {
+
+    .final {
+        padding: 20px 10px;
+    }
+
+    .final-card {
+        padding: 22px;
+        border-radius: 20px;
+    }
+
+    .love-text {
+        font-size: 15px;
+        line-height: 2;
+    }
+
+    .ending {
+        font-size: 17px;
+    }
+
+    .moon-title {
+        font-size: 50px;
+    }
+
+    .heart-big {
+        font-size: 55px;
+    }
+
+    .stat span {
+        font-size: 20px;
+    }
+}
